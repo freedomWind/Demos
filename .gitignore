@@ -1,0 +1,8 @@
+﻿#iginore
+.vs
+Library
+ProjectSettings
+Temp
+*.sln
+*.csproj
+*.sln
