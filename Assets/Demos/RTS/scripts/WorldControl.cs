@@ -29,7 +29,8 @@ public class WorldControl : MonoBehaviour, IDragHandler
         }
         if (Input.GetKeyUp(KeyCode.A))
         {
-            Remove("A_0");
+            BuildSys.GetIns().GetBuildObjFromIndex("A_0").DoLevelUp(5);
+            //Remove("A_0");
         }
     }
     void IDragHandler.OnDrag(PointerEventData eventData)
