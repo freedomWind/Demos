@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public sealed class BuildFactory
 { 
@@ -93,14 +94,16 @@ public abstract class BuildObj:System.IDisposable
         else
         {
             OnLevelUpBegin(bAttr.level,durtion);
-            Selectable.DelayAction(() => { LevelUp(); }, durtion);
+            Selectable.DelayAction(LevelUp, durtion);
         }
     }
+    //开始升级
     protected virtual void OnLevelUpBegin(int level,float duration)
     {
         Debug.Log(string.Format("建筑{0}开始升级，当前等级为{1}",num,bAttr.level));
         Debug.Log("播放升级动画");
     }
+    //升级完成
     protected virtual void OnLevelUpOver(int level)
     {
         Debug.Log(string.Format("建筑{0}升级完成，当前等级为{1}", num, bAttr.level));
@@ -122,6 +125,20 @@ class Abuilding : BuildObj
     protected override void OnLevelUpBegin(int level, float duration)
     {
         base.OnLevelUpBegin(level, duration);
+        //gameObject.GetComponent<Image>()
+    }
+}
+class Xbuilding : BuildObj
+{
+    public Xbuilding(string nm) : base(nm)
+    { }
+    protected override void OnLevelUpBegin(int level, float duration)
+    {
+        base.OnLevelUpBegin(level, duration);
+    }
+    protected override void OnLevelUpOver(int level)
+    {
+        base.OnLevelUpOver(level);
     }
 }
 class Bbuilding : BuildObj

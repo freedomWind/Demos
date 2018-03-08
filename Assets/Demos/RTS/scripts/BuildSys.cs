@@ -17,8 +17,8 @@ public sealed class BuildSys
 {
     static BuildSys _ins;
     int bIndex = 0;
-    Dictionary<string, BuildObj> buildObjs;
-    Dictionary<string, List<string>> bDic;
+    Dictionary<string, BuildObj> buildObjs;     //建筑对象 
+    Dictionary<string, List<string>> bDic;      //建筑编号 
     public static BuildSys GetIns()
     {
         if (_ins == null)
