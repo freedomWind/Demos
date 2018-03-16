@@ -11,42 +11,56 @@ using System.Data;
 using OfficeOpenXml;
 
 public static class ExcelTool
-{   
+{
+    public static string ToJsonFromDic(Dictionary<string,string[]> dic)
+    {
+        try
+        {
+            return LitJson.JsonMapper.ToJson(dic);
+        }
+        catch
+        {
+            Debug.LogError("ToJsonFromDic function has accoured error");
+            return "";
+        }
+      //  LauguageData data = new LauguageData();
+        
+    }
+
     /// <summary>
     /// 从excel导入到dic
+    /// 默认第一个表格
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    public static Dictionary<string, string[]> ToArrayListFromExcel(string path)
+    public static Dictionary<string, string[]> ToArrayListFromExcel(string path, int index = 0)
     {
-        
         if (!System.IO.File.Exists(path))
             return null;
         FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read);
         IExcelDataReader excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
         DataSet result = excelReader.AsDataSet();
-
-        int columns = result.Tables[0].Columns.Count;
-        int rows = result.Tables[0].Rows.Count;
+        int columns = result.Tables[index].Columns.Count;
+        int rows = result.Tables[index].Rows.Count;
         //result.Tables[“mySheet”].Rows.Count
         Dictionary<string, string[]> arrDic = new Dictionary<string, string[]>();
         for (int i = 0; i < rows; i++)
         {
-            string[] temp = new string[columns];
+            string[] temp = new string[columns - 1];
             string key = "";
             for (int j = 0; j < columns; j++)
             {
                 if (j == 0)
                 {
-                    key = result.Tables[0].Rows[i][j].ToString();
+                    key = result.Tables[index].Rows[i][j].ToString();
                     continue;
                 }
-                temp[j-1] = result.Tables[0].Rows[i][j].ToString();
+                temp[j - 1] = result.Tables[index].Rows[i][j].ToString();
             }
             if (!arrDic.ContainsKey(key))
                 arrDic.Add(key, temp);
             else
-                Debug.LogError("key reapeat in excel file，the reapeat key is at line："+i+" key:"+key);
+                Debug.LogError("key reapeat in excel file，the reapeat key is at line：" + i + " key:" + key);
         }
         return arrDic;
     }
@@ -66,6 +80,7 @@ public static class ExcelTool
         FileInfo newFile = new FileInfo(path);
         using (ExcelPackage package = new ExcelPackage(newFile))
         {
+
             ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Sheet1");
             for (int i = 0; i < eTitles.Length; i++)  //set titles
             {
